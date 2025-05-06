@@ -17,7 +17,7 @@ def main():
     except KeyboardInterrupt:
         print("\nStopping folder watcher...")
         folder_watcher.stop()
-        print("\nFolder Watcher Stopped.")
+        print("\nFolder Watcher stopped.")
     
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 import os
 from ..File_Processors.image_processor import ImageProcessor
-from ..File_Processors.csv_parquet_processor import FileProcessor
+from ..File_Processors.data_file_processor import FileProcessor
 
 class FileIdentifier:
     
@@ -13,7 +13,7 @@ class FileIdentifier:
         return self.extension.lower() in ['.jpg', '.jpeg', '.png', '.bmp']
     
     def __is_csv_parquet(self):
-        return self.extension.lower() in ['.csv', '.parquet']
+        return self.extension.lower() in ['.csv', '.parquet', '.txt']
     
     def start_process(self):
         if(self.__is_image()):
