@@ -4,7 +4,7 @@ from circle_helper import CircleHelper
 
 def main():
    
-    file_path = 'C:/Users/SUPUN/Desktop/MSC/Master_SW_Eng_Yoobee/MSE800/Week 4/File_Processor/Data Files/sample_junk_mail.csv'  # or 'your_data_file.parquet'
+    file_path = 'sample_junk_mail.csv'  # or 'your_data_file.parquet'
     processor = DataProcessor(file_path)
     processor.load_data()
     processor.initial_processing();
