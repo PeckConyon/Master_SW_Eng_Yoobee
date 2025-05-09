@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 class DataReader:
@@ -10,7 +12,7 @@ class DataReader:
         self.data_source = os.path.join(self.base_dir, 'Files','1924-to-1987_monthly-anually_rainfall.csv')
         self.data_frame = pd.read_csv(self.data_source) 
         
-    def get_info(self):
+    def get_info(self): 
         return self.data_frame.info()
     
     def get_sample_record(self):
@@ -45,4 +47,16 @@ class DataReader:
         average_rain_fall = monthly_data.mean()
         
         return average_rain_fall
-   
+    
+
+    def show_chart_avg_monthly_rain(self):
+        months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
+        monthly_averages = self.data_frame[months].mean()
+        plt.figure(figsize=(10, 5))
+        sns.barplot(x=monthly_averages.index, y=monthly_averages.values)
+        plt.title("Average Monthly Rainfall")
+        plt.ylabel("Rainfall (mm)")
+        plt.xlabel("Month")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
