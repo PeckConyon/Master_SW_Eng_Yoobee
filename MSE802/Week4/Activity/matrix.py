@@ -7,6 +7,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import re
+from qiskit.visualization import plot_bloch_vector
+
 
 # Regex pattern to reject any letters except 'j'
 INVALID_COMPLEX_PATTERN = re.compile(r"[a-ik-z]")  # disallow a–i and k–z
@@ -32,9 +34,9 @@ def get_vector(name):
 
 def to_polar(vector):
     #sqrt(a^2 + b^2)
-    magnitudes = np.abs(vector) #this function can even get an array of complex numbers
-    angles = np.angle(vector) #np. absolute()   in radians
-    return (magnitudes, angles)  # [(r1, θ1), (r2, θ2)]
+    magnitude = np.abs(vector) #this function can even get an array of complex numbers
+    theta = np.angle(vector) #np. absolute()   in radians
+    return magnitude, theta  # [(r1, θ1), (r2, θ2)]
 
 def vector_operations(v1, v2):
     return {
@@ -47,27 +49,35 @@ def vector_operations(v1, v2):
     # Got RuntimeWarning: divide by zero encountered in divide  when no filtering when division for np.divide(v1, v2)
      
 
-def plot_vectors(results):
-    plt.figure(figsize=(10, 7))
-    origin = [0], [0]
+def plot_vectors_in_cartizian(results, v1, v2):
+    colors = ['blue', 'green', 'red']  # v1, v2, result
 
-    for label, vec in results.items():
-        # Plot using real parts only (imaginary can't be shown in 2D XY)
-        #print(f'imaginary part x {vec[0].imag}' )
-        #print(f'imaginary part y {vec[1].imag}' )
-        x = vec[0].real
-        y = vec[1].real
-        plt.quiver(*origin, x, y, angles='xy', scale_units='xy', scale=1, label=label)
+    for label, result_vector in results.items():
+        plt.figure(figsize=(6, 5))
+        origin = [0], [0]
 
-    plt.xlim(-20, 20)
-    plt.ylim(-20, 20)
+        v1c = v1[0] + v1[1]
+        v2c = v2[0] + v2[1]
+        result = result_vector[0] + result_vector[1]
 
-    plt.grid()
-    plt.legend()
-    plt.title("Vector Operation Results")
-    plt.xlabel("Real X")
-    plt.ylabel("Real Y")
-    plt.show()
+        x_vals = [v1c.real, v2c.real, result.real]
+        y_vals = [v1c.imag, v2c.imag, result.imag]
+        vector_labels = ['Vector 1', 'Vector 2', label]
+
+        for i in range(3):
+            plt.quiver(*origin, x_vals[i], y_vals[i], angles='xy', scale_units='xy', scale=1,
+                       color=colors[i], label=vector_labels[i])
+
+        plt.xlim(-10, 10)
+        plt.ylim(-10, 10)
+        plt.grid()
+        plt.title(f"{label} Operation")
+        plt.xlabel("Real")
+        plt.ylabel("Imaginary")
+        plt.legend()
+        plt.gca().set_aspect('equal', adjustable='box')
+        plt.show()
+
 
 
 try:
@@ -76,14 +86,17 @@ try:
 
         v1 = get_vector("Vector 1")
         v2 = get_vector("Vector 2")
+        
+        print(f'Vector 1 : {v1}')
+        print(f'Vector 2 : {v2}')
 
-        polar_v1 = to_polar(v1)
-        polar_v2 = to_polar(v2)
+        magnitude1, theta1  = to_polar(v1)
+        magnitude2, theta2  = to_polar(v2)
 
         print("\nPolar Coordinates:")
         for i in range(2):
-            print(f"Vector 1[{i}]: magnitude = {polar_v1[0][i]:.2f}, theta = {np.degrees(polar_v1[1][i]):.2f} degrees")
-            print(f"Vector 2[{i}]: magnitude = {polar_v2[0][i]:.2f}, theta = {np.degrees(polar_v2[1][i]):.2f} degrees")
+            print(f"Vector 1[{i}]: magnitude = {magnitude1}, theta = {np.degrees(theta1)} degrees")
+            print(f"Vector 2[{i}]: magnitude = {magnitude2}, theta = {np.degrees(theta2)} degrees")
 
         results = vector_operations(v1, v2)
 
@@ -92,7 +105,9 @@ try:
             print(f"{key}: {value}")
 
         # Plot results
-        plot_vectors(results)
+        plot_vectors_in_cartizian(results, v1, v2)
+        
+  
         
         print("\nPress CTRL + C  and press ENTER to exist")
 
