@@ -1,0 +1,7 @@
+unit testing will help to stop/minimize propagation or bubble up many issues to qa cycles and also for
+productions that because developers will have to perform unit testing for smaller testable functions
+during the development stage. Also the test cases should be written separately. Using unit testing 
+an output of a particular function can be tested against possible output/s to verify that function behave as expected. 
+As we test smaller units like this end of the day most of the functionalities of the system will be tested during the development cycles. 
+QA devs also can reuse the test cases as well.  test cases can be run as individually or as a bulk.
+Forcing unit testing is a way to write functions to deal with only a single responsibility.  
